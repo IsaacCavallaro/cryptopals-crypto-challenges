@@ -38,8 +38,8 @@ def decode_bytes_to_string(byte_data):
     return byte_data.decode(errors="ignore")
 
 
-def evaluate_key(key, raw_bytes):
-    """Decrypt the message with the given key and score it."""
+def decrypt_message_with_key_and_score(key, raw_bytes):
+    """Decrypt the bytes message with the given key and scores it."""
     decrypted_bytes = xor_each_byte_against_key(key, raw_bytes)
     decrypted_message = decode_bytes_to_string(decrypted_bytes)
     score = score_message(decrypted_message)
@@ -64,7 +64,9 @@ def find_best_single_byte_key(raw_bytes):
     # Iterate over all possible single-byte keys (0 to 255)
     # We use 256 here because a byte can have 256 possible values (8 bits: 0-255)
     for key in range(256):
-        current_score, decrypted_message = evaluate_key(key, raw_bytes)
+        current_score, decrypted_message = decrypt_message_with_key_and_score(
+            key, raw_bytes
+        )
         best_score, best_key, best_decrypted_message = update_best_key_if_needed(
             current_score,
             decrypted_message,

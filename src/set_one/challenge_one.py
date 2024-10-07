@@ -11,14 +11,14 @@ def convert_raw_bytes_to_base_64(bytes):
     return b64encode(bytes)
 
 
-def decode_base_64_bytes(base_64_bytes):
+def decode_base64_bytes(base_64_bytes):
     return base_64_bytes.decode()
 
 
 def hex_to_base64(hex_str):
     raw_bytes = convert_hex_string_to_bytes(hex_str)
     b64_bytes = convert_raw_bytes_to_base_64(raw_bytes)
-    return decode_base_64_bytes(b64_bytes)
+    return decode_base64_bytes(b64_bytes)
 
 
 if __name__ == "__main__":

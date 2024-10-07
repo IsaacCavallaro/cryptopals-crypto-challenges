@@ -4,7 +4,7 @@ This project documents my journey through the [Cryptopals Crypto Challenges](htt
 
 ## Overview
 
-This repository contains Python scripts for solving the Cryptopals challenges. Each challenge is in its own file, organized by set. The goal of this project is to not only solve the challenges but also to provide clear, documented solutions for anyone following along.
+This repository contains Python scripts for solving the Cryptopals challenges. Each challenge is in its own file, organised by set. The goal of this project is to not only solve the challenges but also to provide clear, documented solutions for anyone following along.
 
 ## How to Install Locally
 
@@ -21,7 +21,7 @@ venv\Scripts\activate      # On Windows
 
 # How to Run the Scripts
 
-Each challenge script is located in the src/set_{x}/ directory and can be run individually. Here's how you can run them:
+Each challenge script is located in the `src/set_{x}/` directory and can be run individually. Here's how you can run them:
 
 1. Activate the Virtual Environment
 Before running any script, ensure your virtual environment is activated:

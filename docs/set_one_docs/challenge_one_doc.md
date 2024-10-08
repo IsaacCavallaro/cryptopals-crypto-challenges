@@ -25,6 +25,4 @@ SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t
 
 # **Cryptopals Rule**
 
-<aside>
 💡 Always operate on raw bytes, never on encoded strings. Only use hex and base64 for pretty-printing.
-</aside>

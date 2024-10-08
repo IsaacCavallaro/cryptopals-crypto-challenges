@@ -27,7 +27,4 @@
 
 ---
 
-<aside>
 💡 "equal-length buffers" means that after you decode both hex strings to raw bytes, they must have the same number of bytes for the XOR operation to work.
-
-</aside>

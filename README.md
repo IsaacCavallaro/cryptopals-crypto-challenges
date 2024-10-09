@@ -1,6 +1,6 @@
 # Cryptopals Crypto Challenges Solutions
 
-This project documents my journey through the [Cryptopals Crypto Challenges](https://www.cryptopals.com/) and provides solutions to each challenge.
+> ⚠️ **NOTE:** This code is part of my initial attempt to document and share my journey through the [Cryptopals Crypto Challenges](https://www.cryptopals.com/). The focus is on understanding and learning the concepts, not on providing optimised or production-ready solutions.
 
 ## Overview
 
@@ -11,12 +11,17 @@ This repository contains Python scripts for solving the Cryptopals challenges. E
 1. **Clone the Repository**  
    First, clone the repository from GitHub:
 
+```bash
+git clone git@github.com:IsaacCavallaro/cryptopals-crypto-challenges.git
+```
+
+---
+
 2. **Set Up a Virtual Environment**  
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate  # On macOS/Linux
-venv\Scripts\activate      # On Windows
 ```
 
 # How to Run the Scripts
@@ -30,8 +35,8 @@ Before running any script, ensure your virtual environment is activated:
 source venv/bin/activate  # On macOS/Linux
 ```
 
-2. Run a Challenge Script
-For example, to run Challenge One:
+2. Run a challenge script
+For example, to run challenge one:
 
 ```bash
 python src/set_one/challenge_one.py

@@ -1,25 +1,5 @@
 ENCRYPTED_FILE = "./src/set_one/challenge_six_codes.txt"
 KEYSIZE = range(2, 41)
-# fmt: off
-LETTERS = [
-    'a', 'b', 'c', 'd',
-    'e', 'f', 'g', 'h',
-    'i', 'j', 'k', 'l',
-    'm', 'n', 'o', 'p',
-    'q', 'r', 's', 't',
-    'u', 'v', 'w', 'x',
-    'y', 'z',
-]
-# fmt: on
-
-
-def score_message(message):
-    """Score the message based on the presence of letters."""
-    score = 0
-    for char in message.lower():
-        if char in LETTERS:
-            score += 1
-    return score
 
 
 def normilize_hamming_distance(distance, size):
@@ -43,16 +23,32 @@ def hamming_distance(a, b):
     return sum(bin(byte1 ^ byte2).count("1") for byte1, byte2 in zip(a, b))
 
 
+def transpose_blocks():
+    pass
+
+
 def convert_txt_file_to_string():
     with open(ENCRYPTED_FILE, "r") as file:
         return file.read()
 
 
+# if smallest distance !0 and smaller than latest distance then input distance
+# We update the smallest distance
+
+
 def break_repeating_key_xor():
     encrypted_str = convert_txt_file_to_string()
-    print(type(encrypted_str))
     for key in KEYSIZE:
-        print(key)
+        smallest_distance = 0
+        # Retrieve the first chunk of bytes with a length of key * 2
+        chunk = encrypted_str[: key * 2]
+
+        # Split the chunk into two equal parts
+        byte_a = chunk[:key]
+        byte_b = chunk[key:]
+
+        distance = hamming_distance(byte_a, byte_b)
+        normilized_result = normilize_hamming_distance(distance, key)
 
 
 if __name__ == "__main__":

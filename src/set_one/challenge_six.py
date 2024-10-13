@@ -38,6 +38,14 @@ def hamming_distance(a, b):
 
 
 def transpose_blocks(initial_blocks, key_size):
+    """
+    Transpose the given blocks of bytes into blocks of key size.
+
+    This function takes blocks of bytes and rearranges them so that each new block
+    contains all bytes at the same position in the original blocks. This is useful
+    when solving a repeating-key XOR because each block can then be treated as if
+    it was encrypted using a single-byte XOR cipher.
+    """
     transposed = [[] for _ in range(key_size)]
     for block in initial_blocks:
         for i in range(min(len(block), key_size)):
@@ -57,6 +65,7 @@ def find_smallest_hamming_distance(distances):
 
 
 def chuck_encrypted_bytes(bytes, distance):
+    """Breaks the bytes input into chunks equal to the given distance"""
     return [bytes[i : i + distance] for i in range(0, len(bytes), distance)]
 
 
@@ -66,6 +75,11 @@ def xor_each_byte_against_key(key, raw_bytes):
 
 
 def split_transposed_blocks_into_key_chunks(transposed_blocks, key_size):
+    """
+    Takes transposed blocks and splits them into chunks where each
+    chunk corresponds to a specific key byte. Allowing for analysis of each
+    key byte separately when solving the repeating-key XOR.
+    """
     chunks = [[] for _ in range(key_size)]
     for i, block in enumerate(transposed_blocks):
         chunks[i % key_size].append(block)
@@ -119,41 +133,42 @@ def decrypt_with_repeating_key(raw_bytes, key):
     return bytes(decrypted_bytes)
 
 
-def break_repeating_key_xor():
-    encrypted_str = convert_txt_file_to_string(ENCRYPTED_FILE)
-    raw_bytes = convert_base64_to_bytes(encrypted_str)
+def divide_ciphertext_into_keysized_chunks(key_size, raw_bytes):
+    """
+    Returns the total number of chunks that can be created with the guessed key size.
+    """
+    return len(raw_bytes) // key_size
 
+
+def convert_bytes_sequence_to_string(byte_sequence):
+    """
+    Convert a sequence of bytes into a string, ignoring any None values.
+    """
+    return "".join(chr(byte) for byte in byte_sequence if byte is not None)
+
+
+def break_repeating_key_xor(raw_bytes):
     all_keys_normalised = []
 
     for key in KEYSIZE:
         distances = []
 
-        # Divide the entire ciphertext into chunks of size KEYSIZE and compute distances
-        total_chunks = len(raw_bytes) // key
+        total_chunks = divide_ciphertext_into_keysized_chunks(key, raw_bytes)
         for i in range(total_chunks - 1):
             chunk_a = raw_bytes[i * key : (i + 1) * key]
             chunk_b = raw_bytes[(i + 1) * key : (i + 2) * key]
-
-            if (
-                len(chunk_a) == key and len(chunk_b) == key
-            ):  # Ensure both chunks are full-sized
-                distance = hamming_distance(chunk_a, chunk_b)
-                distances.append(distance)
+            distance = hamming_distance(chunk_a, chunk_b)
+            distances.append(distance)
 
         # Calculate the average normalized Hamming distance for the current KEYSIZE
         if distances:
             average_distance = sum(distances) / len(distances)
             normalized_result = normalize_hamming_distance(average_distance, key)
-            print(
-                f"Key Size: {key}, Average Hamming Distance: {average_distance}, Normalized Result: {normalized_result}"
-            )
-
             all_keys_normalised.append(
                 {"key": key, "normalized_result": normalized_result}
             )
 
     smallest_hamming_distance = find_smallest_hamming_distance(all_keys_normalised)
-
     initial_blocks = chuck_encrypted_bytes(raw_bytes, smallest_hamming_distance["key"])
 
     transposed_blocks = transpose_blocks(
@@ -162,7 +177,6 @@ def break_repeating_key_xor():
     transposed_block_chunks = split_transposed_blocks_into_key_chunks(
         transposed_blocks, smallest_hamming_distance["key"]
     )
-
     final_key = []
     for chunk in transposed_block_chunks:
         best_score = 0
@@ -185,7 +199,7 @@ def break_repeating_key_xor():
 
         final_key.append(best_key)
 
-    final_key_str = "".join(chr(byte) for byte in final_key if byte is not None)
+    final_key_str = convert_bytes_sequence_to_string(final_key)
     print(f"The best repeating XOR key is: {final_key_str}")
 
     # Decrypt the message
@@ -195,11 +209,7 @@ def break_repeating_key_xor():
 
 
 if __name__ == "__main__":
-    decoded_message = break_repeating_key_xor()
+    encrypted_str = convert_txt_file_to_string(ENCRYPTED_FILE)
+    raw_bytes = convert_base64_to_bytes(encrypted_str)
+    decoded_message = break_repeating_key_xor(raw_bytes)
     print("Decrypted message:", decoded_message)
-    # FOR INITIAL TESTING PURPOSES ONLY
-    # TEST_STRING_ONE = "this is a test"
-    # TEST_STRING_TWO = "wokka wokka!!!"
-    # bytes_one = convert_string_to_bytes(TEST_STRING_ONE)
-    # bytes_two = convert_string_to_bytes(TEST_STRING_TWO)
-    # print(hamming_distance(bytes_one, bytes_two))

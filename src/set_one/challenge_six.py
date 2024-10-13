@@ -2,7 +2,7 @@ import base64
 
 ENCRYPTED_FILE = "./src/set_one/challenge_six_codes.txt"
 KEYSIZE = range(2, 41)
-LETTERS = set("abcdefghijklmnopqrstuvwxyz")
+LETTERS = set("abcdefghijklmnopqrstuvwxyz ")  # Need to include space
 
 # fmt: off
 COMMON_ENGLISH_WORDS = set(
@@ -45,13 +45,15 @@ def transpose_blocks(initial_blocks, key_size):
     return [bytes(column) for column in transposed]
 
 
-def convert_txt_file_to_string():
-    with open(ENCRYPTED_FILE, "r") as file:
-        return file.read().strip()
+def convert_txt_file_to_string(encrypted_file):
+    with open(encrypted_file, "r") as file:
+        return file.read()
 
 
-def find_smallest_hamming_distance(normalized_list):
-    return min(normalized_list, key=lambda x: x["normalized_result"])
+def find_smallest_hamming_distance(distances):
+    # Sort the list of key distances by normalized_result
+    distances = sorted(distances, key=lambda x: x["normalized_result"])
+    return distances[0]
 
 
 def chuck_encrypted_bytes(bytes, distance):
@@ -118,19 +120,40 @@ def decrypt_with_repeating_key(raw_bytes, key):
 
 
 def break_repeating_key_xor():
-    encrypted_str = convert_txt_file_to_string()
+    encrypted_str = convert_txt_file_to_string(ENCRYPTED_FILE)
     raw_bytes = convert_base64_to_bytes(encrypted_str)
+
     all_keys_normalised = []
 
     for key in KEYSIZE:
-        chunk = raw_bytes[: key * 2]
-        byte_a = chunk[:key]
-        byte_b = chunk[key:]
-        distance = hamming_distance(byte_a, byte_b)
-        normalized_result = normalize_hamming_distance(distance, key)
-        all_keys_normalised.append({"key": key, "normalized_result": normalized_result})
+        distances = []
+
+        # Divide the entire ciphertext into chunks of size KEYSIZE and compute distances
+        total_chunks = len(raw_bytes) // key
+        for i in range(total_chunks - 1):
+            chunk_a = raw_bytes[i * key : (i + 1) * key]
+            chunk_b = raw_bytes[(i + 1) * key : (i + 2) * key]
+
+            if (
+                len(chunk_a) == key and len(chunk_b) == key
+            ):  # Ensure both chunks are full-sized
+                distance = hamming_distance(chunk_a, chunk_b)
+                distances.append(distance)
+
+        # Calculate the average normalized Hamming distance for the current KEYSIZE
+        if distances:
+            average_distance = sum(distances) / len(distances)
+            normalized_result = normalize_hamming_distance(average_distance, key)
+            print(
+                f"Key Size: {key}, Average Hamming Distance: {average_distance}, Normalized Result: {normalized_result}"
+            )
+
+            all_keys_normalised.append(
+                {"key": key, "normalized_result": normalized_result}
+            )
 
     smallest_hamming_distance = find_smallest_hamming_distance(all_keys_normalised)
+
     initial_blocks = chuck_encrypted_bytes(raw_bytes, smallest_hamming_distance["key"])
 
     transposed_blocks = transpose_blocks(
@@ -168,11 +191,15 @@ def break_repeating_key_xor():
     # Decrypt the message
     key = final_key_str.encode()
     decrypted_message = decrypt_with_repeating_key(raw_bytes, key)
-
-    # Decode the decrypted bytes to a string for readability
-    decoded_message = decrypted_message.decode("utf-8", errors="ignore")
-    print("Decrypted message:", decoded_message)
+    return decrypted_message.decode("utf-8", errors="ignore")
 
 
 if __name__ == "__main__":
-    break_repeating_key_xor()
+    decoded_message = break_repeating_key_xor()
+    print("Decrypted message:", decoded_message)
+    # FOR INITIAL TESTING PURPOSES ONLY
+    # TEST_STRING_ONE = "this is a test"
+    # TEST_STRING_TWO = "wokka wokka!!!"
+    # bytes_one = convert_string_to_bytes(TEST_STRING_ONE)
+    # bytes_two = convert_string_to_bytes(TEST_STRING_TWO)
+    # print(hamming_distance(bytes_one, bytes_two))

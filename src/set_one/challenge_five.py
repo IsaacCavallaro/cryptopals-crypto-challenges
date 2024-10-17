@@ -1,20 +1,12 @@
+from utils.helper_functions import (
+    convert_string_to_bytes,
+    xor_byte_with_key,
+    convert_bytes_to_hex,
+)
+
+
 STANZA = "Burning 'em, if you ain't quick and nimble I go crazy when I hear a cymbal"
 KEY = "ICE"
-
-
-def convert_string_to_bytes(string):
-    """Convert a string into a bytes object using UTF-8 encoding."""
-    return string.encode(encoding="utf-8")
-
-
-def xor_byte_with_key(byte, key_byte):
-    """Perform XOR operation between a single byte and a key byte."""
-    return byte ^ key_byte
-
-
-def convert_bytes_to_hex(byte_array):
-    """Convert a byte array to a hexadecimal string representation."""
-    return byte_array.hex()
 
 
 def repeating_key_xor(stanza_bytes, key_bytes):

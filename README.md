@@ -41,3 +41,11 @@ For example, to run challenge one:
 ```bash
 python src/set_one/challenge_one.py
 ```
+
+# How to Run the Tests
+
+- Assuming you are in the root directory of the project:
+
+```bash
+pytest src/set_{x}/tests/{x}.py
+```

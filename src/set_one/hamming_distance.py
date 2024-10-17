@@ -1,5 +1,3 @@
-import base64
-
 TEST_STRING_ONE = "this is a test"
 TEST_STRING_TWO = "wokka wokka!!!"
 
@@ -10,9 +8,13 @@ def convert_string_to_bytes(string):
 
 
 def hamming_distance(a, b):
-    """For each pair of bytes, count how many bits differ
+    """For each pair of bytes, count how many bits differ.
     Add up all those counts to get the total number of differing bits between the two sequences.
     """
+    # Ensure that both inputs are of type 'bytes'
+    if not isinstance(a, bytes) or not isinstance(b, bytes):
+        raise ValueError("Both inputs must be of type 'bytes'.")
+
     # Ensure the two byte sequences are of the same length
     if len(a) != len(b):
         raise ValueError("Byte sequences must be of the same length.")
@@ -24,4 +26,4 @@ def hamming_distance(a, b):
 if __name__ == "__main__":
     bytes_one = convert_string_to_bytes(TEST_STRING_ONE)
     bytes_two = convert_string_to_bytes(TEST_STRING_TWO)
-    print(hamming_distance(TEST_STRING_ONE, bytes_two))
+    print(hamming_distance(bytes_one, bytes_two))

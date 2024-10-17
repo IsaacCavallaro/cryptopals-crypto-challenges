@@ -1,18 +1,10 @@
-from base64 import b64encode
+from utils.helper_functions import (
+    convert_hex_string_to_bytes,
+    convert_raw_bytes_to_base_64,
+    decode_base64_bytes,
+)
 
 HEXADECIMAL_STRING = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
-
-
-def convert_hex_string_to_bytes(str):
-    return bytes.fromhex(str)
-
-
-def convert_raw_bytes_to_base_64(bytes):
-    return b64encode(bytes)
-
-
-def decode_base64_bytes(base_64_bytes):
-    return base_64_bytes.decode()
 
 
 def hex_to_base64(hex_str):

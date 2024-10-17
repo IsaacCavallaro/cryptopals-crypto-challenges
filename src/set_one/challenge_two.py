@@ -1,17 +1,12 @@
+from utils.helper_functions import (
+    convert_hex_string_to_bytes,
+    xor_two_byte_values,
+    convert_to_hex,
+)
+
+
 HEXADECIMAL_STRING_ONE = "1c0111001f010100061a024b53535009181c"
 HEXADECIMAL_STRING_TWO = "686974207468652062756c6c277320657965"
-
-
-def convert_hex_string_to_bytes(str):
-    return bytes.fromhex(str)
-
-
-def xor_two_byte_values(bytes1, bytes2):
-    return bytes(a ^ b for a, b in zip(bytes1, bytes2))
-
-
-def convert_to_hex(xor_result):
-    return xor_result.hex()
 
 
 def fixed_xor(hex_str1, hex_str2):

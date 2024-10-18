@@ -9,11 +9,11 @@ HEXADECIMAL_STRING = (
 )
 
 
-def find_best_single_byte_key(raw_bytes):
+def find_best_single_byte_key(raw_bytes: bytes) -> tuple[int, str, int]:
     """Find the best single-byte XOR key that produces the highest-scoring message."""
-    best_score = 0
-    best_decrypted_message = ""
-    best_key = 0
+    best_score: int = 0
+    best_decrypted_message: str = ""
+    best_key: int = 0
 
     # Iterate over all possible single-byte keys (0 to 255)
     # We use 256 here because a byte can have 256 possible values (8 bits: 0-255)
@@ -33,9 +33,9 @@ def find_best_single_byte_key(raw_bytes):
     return best_key, best_decrypted_message, best_score
 
 
-def single_byte_xor_cipher(hex_str):
+def single_byte_xor_cipher(hex_str: str) -> tuple[int, str, int]:
     """Decrypt a hexadecimal string using the best single-byte XOR key."""
-    raw_bytes = convert_hex_string_to_bytes(hex_str)
+    raw_bytes: bytes = convert_hex_string_to_bytes(hex_str)
     return find_best_single_byte_key(raw_bytes)
 
 

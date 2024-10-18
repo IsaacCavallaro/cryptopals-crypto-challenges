@@ -1,3 +1,4 @@
+from typing import List, Dict, Union
 from utils.helper_functions import (
     convert_hex_string_to_bytes,
     decrypt_message_with_key_and_score,
@@ -10,17 +11,19 @@ from utils.helper_functions import (
 HEXADECIMALS_FILE = "./src/set_one/challenge_four_codes.txt"
 
 
-def detect_single_character_xor():
-    hex_lines_list = convert_file_to_list(HEXADECIMALS_FILE)
-    best_decrypted_list = []  # List to store best decrypted messages
+def detect_single_character_xor() -> Dict[str, Union[str, int]]:
+    hex_lines_list: List[str] = convert_file_to_list(HEXADECIMALS_FILE)
+    best_decrypted_list: List[Dict[str, Union[str, int]]] = (
+        []
+    )  # List to store best decrypted messages
 
     # Process each hex string in the list
     for hex_str in hex_lines_list:
         raw_bytes = convert_hex_string_to_bytes(hex_str)
 
-        best_score = 0
-        best_decrypted_message = ""
-        best_key = 0
+        best_score: int = 0
+        best_decrypted_message: str = ""
+        best_key: int = 0
 
         # Iterate over all possible single-byte keys (0 to 255)
         for key in range(256):

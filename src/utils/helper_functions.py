@@ -1,5 +1,5 @@
 import base64
-from base64 import b64encode
+from typing import List, Union
 
 LETTERS = set("abcdefghijklmnopqrstuvwxyz ")  # Need to include space
 
@@ -21,53 +21,53 @@ COMMON_ENGLISH_WORDS = set(
 
 
 # Convert functions
-def convert_file_to_list(hex_file):
+def convert_file_to_list(hex_file: str) -> List[str]:
     with open(hex_file, "r") as file:
         return file.read().splitlines()
 
 
-def convert_txt_file_to_string(encrypted_file):
+def convert_txt_file_to_string(encrypted_file: str) -> str:
     with open(encrypted_file, "r") as file:
         return file.read()
 
 
-def convert_bytes_to_hex(byte_array):
+def convert_bytes_to_hex(byte_array: bytes) -> str:
     """Convert a byte array to a hexadecimal string representation."""
     return byte_array.hex()
 
 
-def convert_hex_string_to_bytes(str):
-    return bytes.fromhex(str)
+def convert_hex_string_to_bytes(hex_string: str) -> bytes:
+    return bytes.fromhex(hex_string)
 
 
-def convert_string_to_bytes(string):
+def convert_string_to_bytes(string: str) -> bytes:
     """Convert a string into a bytes object using UTF-8 encoding."""
     return string.encode(encoding="utf-8")
 
 
-def convert_raw_bytes_to_base_64(bytes):
-    return b64encode(bytes)
+def convert_raw_bytes_to_base_64(raw_bytes: bytes) -> bytes:
+    return base64.b64encode(raw_bytes)
 
 
-def convert_to_hex(xor_result):
-    return xor_result.hex()
+def convert_to_hex(bytes_input: bytes) -> str:
+    return bytes_input.hex()
 
 
-def convert_base64_to_bytes(base64_str):
+def convert_base64_to_bytes(base64_str: str) -> bytes:
     """Converts a Base64 encoded string into raw bytes."""
     return base64.b64decode(base64_str)
 
 
-def decode_base64_bytes(base_64_bytes):
+def decode_base64_bytes(base_64_bytes: bytes) -> str:
     return base_64_bytes.decode()
 
 
-def decode_bytes_to_string(byte_data):
+def decode_bytes_to_string(byte_data: bytes) -> str:
     """Decode bytes to string, ignoring non-printable characters."""
     return byte_data.decode(errors="ignore")
 
 
-def convert_bytes_sequence_to_string(byte_sequence):
+def convert_bytes_sequence_to_string(byte_sequence: Union[bytes, List[int]]) -> str:
     """
     Convert a sequence of bytes into a string, ignoring any None values.
     """
@@ -75,22 +75,23 @@ def convert_bytes_sequence_to_string(byte_sequence):
 
 
 # Xor functions
-def xor_byte_with_key(byte, key_byte):
+def xor_byte_with_key(byte: bytes, key_byte: bytes) -> int:
     """Perform XOR operation between a single byte and a key byte."""
     return byte ^ key_byte
 
 
-def xor_two_byte_values(bytes1, bytes2):
+def xor_two_byte_values(bytes1: bytes, bytes2: bytes) -> bytes:
+    """Perform XOR operation between two byte sequences."""
     return bytes(a ^ b for a, b in zip(bytes1, bytes2))
 
 
-def xor_each_byte_against_key(key, raw_bytes):
+def xor_each_byte_against_key(key: int, raw_bytes: bytes) -> bytes:
     """XOR each byte of raw_bytes with the given key."""
     return bytes([b ^ key for b in raw_bytes])
 
 
 # Calcuation functions
-def normalize_hamming_distance(distance, size):
+def normalize_hamming_distance(distance: int, size: int) -> int:
     return distance / size
 
 
@@ -104,14 +105,14 @@ def find_smallest_hamming_distance(distances):
     return distances[0]
 
 
-def hamming_distance(a, b):
+def hamming_distance(a: bytes, b: bytes) -> int:
     """Count differing bits between two byte sequences."""
     if len(a) != len(b):
         raise ValueError("Byte sequences must be of the same length.")
     return sum(bin(byte1 ^ byte2).count("1") for byte1, byte2 in zip(a, b))
 
 
-def score_message(message):
+def score_message(message: str) -> int:
     """Score the message based on the presence of letters and common words."""
     score = 0
     words = message.lower().split()

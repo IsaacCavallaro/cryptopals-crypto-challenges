@@ -1,5 +1,5 @@
 from utils.helper_functions import (
-    convert_txt_file_to_string,
+    convert_file_to_string,
     decrypt_message_with_key_and_score,
     update_best_key_if_needed,
     normalize_hamming_distance,
@@ -82,7 +82,7 @@ def break_repeating_key_xor(raw_bytes: bytes):
 
 
 if __name__ == "__main__":
-    encrypted_str = convert_txt_file_to_string(ENCRYPTED_FILE)
+    encrypted_str = convert_file_to_string(ENCRYPTED_FILE)
     raw_bytes = convert_base64_to_bytes(encrypted_str)
     decoded_message = break_repeating_key_xor(raw_bytes)
     print("Decrypted message:", decoded_message)

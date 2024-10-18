@@ -1,8 +1,9 @@
 import pytest
 import base64
 from utils.helper_functions import (
+    HexadecimalError,
     convert_file_to_list,
-    convert_txt_file_to_string,
+    convert_file_to_string,
     convert_bytes_to_hex,
     convert_hex_string_to_bytes,
     convert_string_to_bytes,
@@ -10,7 +11,19 @@ from utils.helper_functions import (
     decode_base64_bytes,
     convert_bytes_sequence_to_string,
     xor_byte_with_key,
+    str_is_hexadecimal,
 )
+
+
+# Validate data functions
+def test_str_is_hexadecimal():
+    assert str_is_hexadecimal("1") == True
+    assert str_is_hexadecimal("9") == True
+    assert str_is_hexadecimal("a") == True
+    assert str_is_hexadecimal("A") == True
+    assert str_is_hexadecimal("fF") == True
+    with pytest.raises(HexadecimalError):
+        str_is_hexadecimal("g")
 
 
 # Convert functions
@@ -32,18 +45,19 @@ def test_valid_convert_file_to_string(tmp_path):
     test_file = tmp_path / "test_file.txt"
     content = "Hello there"
     test_file.write_text(content)
-    assert convert_txt_file_to_string(test_file) == "Hello there"
+    assert convert_file_to_string(test_file) == "Hello there"
 
 
 def test_valid_convert_bytes_to_hex():
-    byte_array = b"\x00\x01\x02\x03\x0f\x10\xff"
-    assert isinstance(byte_array, bytes), "byte_array should be of type bytes"
-    assert convert_bytes_to_hex(byte_array) == "000102030f10ff"
+    assert convert_bytes_to_hex(b"\x00\x01\x02\x03\x0f\x10\xff") == "000102030f10ff"
 
 
 def test_invalid_convert_bytes_to_hex():
-    invalid_input = "this is not a byte array"
-    assert not isinstance(invalid_input, bytes), "input should be of type bytes"
+    with pytest.raises(ValueError, match="Input must be of type 'bytes'."):
+        convert_bytes_to_hex("a")
+
+    with pytest.raises(ValueError, match="Input must be of type 'bytes'."):
+        convert_bytes_to_hex(1)
 
 
 def test_valid_convert_hex_string_to_bytes():

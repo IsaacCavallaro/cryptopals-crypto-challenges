@@ -10,7 +10,7 @@ def is_equal_to_16_bytes(data):
     return len(data) == 16
 
 
-def add_round_key(state, round_key):
+def add_round_key(state: List[List[int]], round_key: List[List[int]]) -> None:
     """Perform the AddRoundKey operation."""
     for i in range(4):  # For each row
         for j in range(4):  # For each column

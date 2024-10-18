@@ -20,24 +20,44 @@ COMMON_ENGLISH_WORDS = set(
 # fmt: on
 
 
+# Validate data functions
+class HexadecimalError(ValueError):
+    """Custom exception for invalid hexadecimal strings."""
+
+    pass
+
+
+def str_is_hexadecimal(string: str) -> bool:
+    if not isinstance(string, str):
+        raise HexadecimalError("Input must be a string.")
+
+    try:
+        int(string, 16)
+        return True
+    except ValueError:
+        raise HexadecimalError(f"'{string}' is not a valid hexadecimal number.")
+
+
 # Convert functions
-def convert_file_to_list(hex_file: str) -> List[str]:
-    with open(hex_file, "r") as file:
+def convert_file_to_list(string: str) -> List[str]:
+    with open(string, "r") as file:
         return file.read().splitlines()
 
 
-def convert_txt_file_to_string(encrypted_file: str) -> str:
-    with open(encrypted_file, "r") as file:
+def convert_file_to_string(string: str) -> str:
+    with open(string, "r") as file:
         return file.read()
 
 
-def convert_bytes_to_hex(byte_array: bytes) -> str:
-    """Convert a byte array to a hexadecimal string representation."""
-    return byte_array.hex()
+def convert_bytes_to_hex(bytes_input: bytes) -> str:
+    if not isinstance(bytes_input, bytes):
+        raise ValueError("Input must be of type 'bytes'.")
+    return bytes_input.hex()
 
 
 def convert_hex_string_to_bytes(hex_string: str) -> bytes:
-    return bytes.fromhex(hex_string)
+    if str_is_hexadecimal(hex_string):
+        return bytes.fromhex(hex_string)
 
 
 def convert_string_to_bytes(string: str) -> bytes:
@@ -46,11 +66,9 @@ def convert_string_to_bytes(string: str) -> bytes:
 
 
 def convert_raw_bytes_to_base_64(raw_bytes: bytes) -> bytes:
+    if not isinstance(raw_bytes, bytes):
+        raise ValueError("Input must be of type 'bytes'.")
     return base64.b64encode(raw_bytes)
-
-
-def convert_to_hex(bytes_input: bytes) -> str:
-    return bytes_input.hex()
 
 
 def convert_base64_to_bytes(base64_str: str) -> bytes:
@@ -59,11 +77,15 @@ def convert_base64_to_bytes(base64_str: str) -> bytes:
 
 
 def decode_base64_bytes(base_64_bytes: bytes) -> str:
+    if not isinstance(base_64_bytes, bytes):
+        raise ValueError("Input must be of type 'bytes'.")
     return base_64_bytes.decode()
 
 
 def decode_bytes_to_string(byte_data: bytes) -> str:
     """Decode bytes to string, ignoring non-printable characters."""
+    if not isinstance(byte_data, bytes):
+        raise ValueError("Input must be of type 'bytes'.")
     return byte_data.decode(errors="ignore")
 
 
@@ -82,6 +104,9 @@ def xor_byte_with_key(byte: bytes, key_byte: bytes) -> int:
 
 def xor_two_byte_values(bytes1: bytes, bytes2: bytes) -> bytes:
     """Perform XOR operation between two byte sequences."""
+    if not isinstance(bytes1, bytes) or not isinstance(bytes2, bytes):
+        raise ValueError("Input must be of type 'bytes'.")
+    # TODO make sure both values are the same size before xor
     return bytes(a ^ b for a, b in zip(bytes1, bytes2))
 
 

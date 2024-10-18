@@ -1,5 +1,7 @@
+from typing import List
+
 # Padding with spaces to make it 16 bytes
-TEXT_TO_ENCRYPT = b"This is some p" + b" " * 3
+TEXT_TO_ENCRYPT = b"This is some p" + b" " * 2
 KEY = b"YELLOW SUBMARINE"  # 16 bytes
 
 
@@ -20,8 +22,14 @@ def format_state(state):
     return [["{:02x}".format(x) for x in row] for row in state]
 
 
-def bytes_to_state(bytes_input):
+def bytes_to_state(bytes_input: bytes) -> List[List[int]]:
     """Convert a 16-byte input to a 4x4 state matrix."""
+    if not isinstance(bytes_input, bytes):
+        raise ValueError("Input must be of type 'bytes'.")
+
+    if not is_equal_to_16_bytes(bytes_input):
+        raise ValueError("Input must be exactly 16 bytes long.")
+
     return [list(bytes_input[i : i + 4]) for i in range(0, 16, 4)]
 
 

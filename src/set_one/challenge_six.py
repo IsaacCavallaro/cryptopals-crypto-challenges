@@ -20,7 +20,7 @@ ENCRYPTED_FILE = "./src/set_one/challenge_six_codes.txt"
 KEYSIZE = range(2, 41)
 
 
-def break_repeating_key_xor(raw_bytes):
+def break_repeating_key_xor(raw_bytes: bytes):
     all_keys_normalised = []
 
     for key in KEYSIZE:

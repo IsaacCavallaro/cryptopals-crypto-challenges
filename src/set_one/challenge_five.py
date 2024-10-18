@@ -4,12 +4,12 @@ from utils.helper_functions import (
     convert_bytes_to_hex,
 )
 
-
 STANZA = "Burning 'em, if you ain't quick and nimble I go crazy when I hear a cymbal"
+
 KEY = "ICE"
 
 
-def repeating_key_xor(stanza_bytes, key_bytes):
+def repeating_key_xor(stanza_bytes: bytes, key_bytes: bytes) -> str:
     """Perform repeating-key XOR encryption on the given bytes using the key."""
     result_bytes = bytearray()
 

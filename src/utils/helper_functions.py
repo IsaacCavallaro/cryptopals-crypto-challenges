@@ -75,7 +75,7 @@ def convert_bytes_sequence_to_string(byte_sequence: Union[bytes, List[int]]) -> 
 
 
 # Xor functions
-def xor_byte_with_key(byte: int, key_byte: int) -> int:
+def xor_byte_with_key(byte: bytes, key_byte: bytes) -> int:
     """Perform XOR operation between a single byte and a key byte."""
     return byte ^ key_byte
 

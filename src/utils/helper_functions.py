@@ -168,9 +168,9 @@ def update_best_key_if_needed(
 
 
 # Block functions
-def chunk_bytes_into_blocks(data, chunk_size):
+def chunk_bytes_into_blocks(data: bytes, block_size: int) -> list:
     """Chunk the input data into blocks of a specified byte size."""
-    return [data[i : i + chunk_size] for i in range(0, len(data), chunk_size)]
+    return [data[i : i + block_size] for i in range(0, len(data), block_size)]
 
 
 def transpose_blocks(initial_blocks, key_size):

@@ -38,7 +38,7 @@ def process_lines(lines: list):
         if duplicate_blocks:
             print(f"Line {i + 1} is likely encrypted in ECB mode.")
             for block, count in duplicate_blocks.items():
-                print(f"Block: {block.hex()} | Count: {count}")
+                print(f"Block: {block} | Count: {count}")
             print(f"Total duplicate blocks: {len(duplicate_blocks)}")
         else:
             print(f"Line {i + 1} shows no ECB mode signs.")

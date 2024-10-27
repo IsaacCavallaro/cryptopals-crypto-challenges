@@ -55,6 +55,12 @@ def convert_bytes_to_hex(bytes_input: bytes) -> str:
     return bytes_input.hex()
 
 
+def read_file_to_lines(filename: str) -> List[str]:
+    """Read a file and return its lines as a list."""
+    with open(filename, "r") as file:
+        return file.readlines()
+
+
 def convert_hex_string_to_bytes(hex_string: str) -> bytes:
     if str_is_hexadecimal(hex_string):
         return bytes.fromhex(hex_string)
@@ -162,6 +168,11 @@ def update_best_key_if_needed(
 
 
 # Block functions
+def chunk_bytes_into_blocks(data, chunk_size):
+    """Chunk the input data into blocks of a specified byte size."""
+    return [data[i : i + chunk_size] for i in range(0, len(data), chunk_size)]
+
+
 def transpose_blocks(initial_blocks, key_size):
     """
     Transpose the given blocks of bytes into blocks of key size.
